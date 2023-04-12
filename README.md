@@ -16,10 +16,35 @@
       sudo apt-get update
       sudo apt-get install build-essential
       ```
+## 数据结构
+```c
+// 任务节点，每个任务用函数指针和对应的参数表示
+// 执行任务时用 pf(arg) 即可，pf表示对应的函数，arg为对应的传入参数
+typedef void* (*function_t)(void* arg);
+typedef struct Jobnode{
+	function_t pf;
+	void* arg;
+}Jobnode;
+
+// 任务队列，用一个队列表示
+typedef struct threadjob{
+	Jobnode data;
+	struct threadjob* next;
+}threadjob;
+
+// 线程池
+typedef struct threadpool{
+	threadjob* poolhead; //任务队列的头节点
+	int jobnum;			 // 任务队列中的任务节点数目
+	int Maxthread;		// 线程池中可容纳的最大线程数目
+	pthread_t* threads; // 线程池中维护的线程句柄
+	sem_t sem;			// 线程池中的同步管理，可以用信号量或互斥锁
+	int flag;           // 线程池结束标志，为0时回收所有挂起的线程
+	......				// 其它你实现过程中可能需要的参数，自行添加
+}threadpool;
+```
 ## 具体任务
 代码框架已经给出，请根据要求填充完成空缺的部分，实现一个简单的线程池
-
-      
 
 ## 代码运行
   1. you should first __make__ the Makefile to build exce.o
